@@ -1,31 +1,21 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import {
-    Menu,
-    X,
-    LayoutDashboard,
-    Users,
-    Settings,
-    BarChart3,
+    Menu, X, LayoutDashboard, Plus, Asterisk,
 } from "lucide-react";
-import {
-    BarChart,
-    Bar,
-    XAxis,
-    YAxis,
-    Tooltip,
-    ResponsiveContainer,
-    CartesianGrid,
-} from "recharts";
+
 import Dashboard from "../pages/Dashboard";
+import AddProject from "../pages/AddProject";
+import { useNavigate } from "react-router";
 
 const Root = () => {
     const [isOpen, setIsOpen] = useState(true);
-    const [active, setActive] = useState("Dashboard");
+    const [active, setActive] = useState("dashboard");
+    const navigate = useNavigate();
 
     const navItems = [
-        { name: "Dashboard", icon: <LayoutDashboard size={18} /> },
-        { name: "Users", icon: <Users size={18} /> },
-        { name: "Settings", icon: <Settings size={18} /> },
+        { name: "Dashboard", icon: <LayoutDashboard size={18} />, route: "dashboard" },
+        { name: "Add Project", icon: <Plus size={18} />, route: "addProject" },
+        { name: "All Projects", icon: <Asterisk size={18} />, route: "allProject" },
     ];
 
     return (
@@ -56,16 +46,15 @@ const Root = () => {
                         {navItems.map((item) => (
                             <li
                                 key={item.name}
-                                onClick={() => setActive(item.name)}
-                                className={`flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 ${active === item.name
-                                    ? "bg-blue-600 text-white"
-                                    : "text-gray-700 hover:bg-gray-200"
+                                onClick={() => {
+                                    setActive(item.route);
+                                    navigate(item.route);
+                                }}
+                                className={`flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 ${active === item.route ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-gray-200"
                                     }`}
                             >
                                 {item.icon}
-                                {isOpen && (
-                                    <span className="whitespace-nowrap">{item.name}</span>
-                                )}
+                                {isOpen && <span className="whitespace-nowrap">{item.name}</span>}
                             </li>
                         ))}
                     </ul>
@@ -83,67 +72,19 @@ const Root = () => {
                     } p-8 overflow-y-auto`}
             >
                 {/* Dashboard Section */}
-                {active === "Dashboard" && (
-                    // <div>
-                    //     <div className="flex items-center gap-2 mb-4">
-                    //         <BarChart3 size={22} className="text-blue-600" />
-                    //         <h1 className="text-2xl font-semibold text-gray-800">
-                    //             Dashboard Overview
-                    //         </h1>
-                    //     </div>
-
-                    //     {/* Chart Section */}
-                    //     <div className="bg-white p-6 rounded-lg shadow mb-8">
-                    //         <h2 className="text-lg font-semibold mb-4 text-gray-700">
-                    //             Total Projects per Month
-                    //         </h2>
-                    //         <div className="w-full h-64">
-                    //             <ResponsiveContainer>
-                    //                 <BarChart data={chartData}>
-                    //                     <CartesianGrid strokeDasharray="3 3" />
-                    //                     <XAxis dataKey="name" />
-                    //                     <YAxis />
-                    //                     <Tooltip />
-                    //                     <Bar dataKey="projects" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                    //                 </BarChart>
-                    //             </ResponsiveContainer>
-                    //         </div>
-                    //     </div>
-
-                    //     {/* Ongoing Projects */}
-                    //     <div className="bg-white p-6 rounded-lg shadow">
-                    //         <h2 className="text-lg font-semibold mb-4 text-gray-700">
-                    //             Ongoing Projects
-                    //         </h2>
-                    //         <div className="space-y-4">
-                    //             {ongoingProjects.map((project, index) => (
-                    //                 <div
-                    //                     key={index}
-                    //                     className="border rounded-lg p-4 hover:shadow-md transition"
-                    //                 >
-                    //                     <h3 className="font-semibold text-blue-600 text-lg">
-                    //                         {project.title}
-                    //                     </h3>
-                    //                     <p className="text-gray-600 mt-1">{project.description}</p>
-                    //                 </div>
-                    //             ))}
-                    //         </div>
-                    //     </div>
-                    // </div>
+                {active === "dashboard" && (
                     <Dashboard></Dashboard>
                 )}
 
                 {/* Users Page */}
-                {active === "Users" && (
-                    <h1 className="text-2xl font-semibold text-gray-800">
-                        Manage Users
-                    </h1>
+                {active === "addProject" && (
+                    <AddProject />
                 )}
 
                 {/* Settings Page */}
-                {active === "Settings" && (
+                {active === "allProject" && (
                     <h1 className="text-2xl font-semibold text-gray-800">
-                        System Settings
+                        All Projects Page
                     </h1>
                 )}
             </main>
