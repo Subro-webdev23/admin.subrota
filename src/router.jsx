@@ -2,8 +2,14 @@ import { createBrowserRouter } from "react-router";
 import Root from "./layout/Root";
 import AddProject from "./pages/AddProject";
 import Dashboard from "./pages/Dashboard";
+import AllProjects from "./pages/AllProjects";
+import SignIn from "./pages/SignIn";
 
 export const router = createBrowserRouter([
+    {
+        path: "/auth",
+        element: <SignIn />,
+    },
     {
         path: "/",
         element: <Root />,
@@ -18,7 +24,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: "allProject",
-                element: <h1>All Projects Page</h1>,
+                element: <AllProjects />,
             },
             {
                 index: true,

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { createProject } from "../api/api";
+import Swal from "sweetalert2";
 
 const AddProject = () => {
     const [formData, setFormData] = useState({
@@ -27,10 +29,30 @@ const AddProject = () => {
             challenges: formData.challenges.split(",").map((item) => item.trim()),
             futurePlans: formData.futurePlans.split(",").map((item) => item.trim()),
         };
+        createProject(formattedData)
+            .then((data) => {
+                Swal.fire({
+                    title: "Success!",
+                    text: "Project added successfully.",
+                    icon: "success",
+                    timer: 1500,
+                    showConfirmButton: false,
+                });
+                setFormData({
+                    name: "",
+                    image: "",
+                    stack: "",
+                    description: "",
+                    liveLink: "",
+                    githubLink: "",
+                    challenges: "",
+                    futurePlans: "",
+                });
+            })
+            .catch((err) => {
+                alert("Failed to add project. Please try again.");
+            });
 
-        console.log("Project Data:", formattedData);
-        alert("Project added successfully! (Check console for data)");
-        // ⬇️ তুমি চাইলে এখানে MongoDB বা backend API call করতে পারো
     };
 
     return (
