@@ -1,22 +1,37 @@
-import React, { use, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-    Menu, X, LayoutDashboard, Plus, Asterisk,
+    Menu, X, LayoutDashboard, Plus, Asterisk, LogOut,
 } from "lucide-react";
 
 import Dashboard from "../pages/Dashboard";
 import AddProject from "../pages/AddProject";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
+import AllProjects from "../pages/AllProjects";
 
 const Root = () => {
     const [isOpen, setIsOpen] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(null);
     const [active, setActive] = useState("dashboard");
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        setIsLoggedIn(!!token);
+    }, []);
+    console.log(isLoggedIn);
+
 
     const navItems = [
         { name: "Dashboard", icon: <LayoutDashboard size={18} />, route: "dashboard" },
         { name: "Add Project", icon: <Plus size={18} />, route: "addProject" },
         { name: "All Projects", icon: <Asterisk size={18} />, route: "allProject" },
     ];
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        setIsLoggedIn(false);
+        navigate("/");
+    };
 
     return (
         <div className="flex min-h-screen bg-gray-100">
@@ -60,6 +75,25 @@ const Root = () => {
                     </ul>
                 </nav>
 
+                {/* Sign Out Button */}
+                <div className="p-4 border-t">
+                    {isLoggedIn ? (
+                        <button
+                            onClick={handleLogout}
+                            className="px-5 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold shadow-md hover:scale-105 transition-all duration-200"
+                        >
+                            Logout
+                        </button>
+                    ) : (
+                        <Link
+                            to="/auth"
+                            className="px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 text-white font-semibold shadow-md hover:scale-105 transition-all duration-200"
+                        >
+                            Login
+                        </Link>
+                    )}
+                </div>
+
                 {/* Footer */}
                 <div className="p-4 text-sm text-gray-500 border-t">
                     {isOpen && <p>© 2025 Admin Panel</p>}
@@ -83,9 +117,7 @@ const Root = () => {
 
                 {/* Settings Page */}
                 {active === "allProject" && (
-                    <h1 className="text-2xl font-semibold text-gray-800">
-                        All Projects Page
-                    </h1>
+                    <AllProjects />
                 )}
             </main>
         </div>
