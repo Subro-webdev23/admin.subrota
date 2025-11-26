@@ -88,10 +88,10 @@ const Dashboard = () => {
                 <div className="space-y-4">
                     {ongoingProjects.map((p, i) => (
                         <div key={i} className="border-b pb-3">
-                            <h4 className="font-semibold text-gray-800">{p.title}</h4>
+                            <h4 className="font-semibold text-gray-800">{p.name}</h4>
                             <p className="text-gray-600 text-sm">{p.description}</p>
                             <a
-                                href={p.link}
+                                href={p.liveLink}
                                 target="_blank"
                                 rel="noreferrer"
                                 className="text-blue-500 text-sm hover:underline"
