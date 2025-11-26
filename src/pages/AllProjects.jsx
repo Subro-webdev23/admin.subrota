@@ -86,6 +86,7 @@ const AllProjects = () => {
             githubLink: project.githubLink || "",
             challenges: project.challenges || "",
             futurePlans: project.futurePlans || "",
+            status: project.status || "",
         });
         setEditModalOpen(true);
     };
@@ -256,6 +257,23 @@ const AllProjects = () => {
                                     className="w-full bg-white border border-gray-600 rounded-lg px-3 py-2 text-gray-600 focus:outline-none focus:border-cyan-400"
                                     placeholder="e.g. React, Node.js, Tailwind"
                                 />
+                            </div>
+
+                            {/* Project Status */}
+                            <div>
+                                <label className="block text-sm mb-1">Project Status</label>
+                                <select
+                                    name="status"
+                                    defaultValue={formData.status}
+                                    onChange={handleChange}
+                                    className="w-full bg-white border border-gray-600 rounded-lg px-3 py-2 text-gray-600 focus:outline-none focus:border-cyan-400"
+                                    required
+                                >
+                                    <option value="">Select Status</option>
+                                    <option value="ongoing">Ongoing</option>
+                                    <option value="finished">Finished</option>
+                                    <option value="upcoming">Upcoming</option>
+                                </select>
                             </div>
 
                             {/* Live Link */}
