@@ -1,41 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
-
-const data = [
-    { name: "Ongoing Projects", value: 4 },
-    { name: "Finished Projects", value: 6 },
-    { name: "Upcoming Projects", value: 2 },
-];
+import { fetchProjects } from "../api/api";
 
 const COLORS = ["#60a5fa", "#34d399", "#fbbf24"];
 
-const ongoingProjects = [
-    {
-        title: "E-Commerce Dashboard",
-        description: "Developing analytics and admin panel for product tracking.",
-        link: "https://example.com/ecommerce",
-    },
-    {
-        title: "Travel Booking Site",
-        description: "Working on flight booking and dynamic search filters.",
-        link: "https://example.com/travel",
-    },
-];
-
-const finishedProjects = [
-    {
-        title: "Portfolio Website",
-        description: "Personal portfolio built with React and TailwindCSS.",
-        link: "https://example.com/portfolio",
-    },
-    {
-        title: "Restaurant Landing Page",
-        description: "Built a modern responsive landing page for a restaurant.",
-        link: "https://example.com/restaurant",
-    },
-];
-
 const Dashboard = () => {
+
+    const [projects, setProjects] = useState([]);
+    const [ongoingProjects, setOngoingProjects] = useState([]);
+    const [loading, setLoading] = useState(true);
+    console.log(projects);
+
+
+    // Fetch Projects
+    const loadProjects = async () => {
+        try {
+            const data = await fetchProjects();
+            const finished = data.filter((p) => p.status !== "ongoing");
+            setProjects(finished);
+            const ongoing = data.filter((p) => p.status === "ongoing");
+            setOngoingProjects(ongoing);
+        } catch (error) {
+            console.error("Error fetching projects:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    useEffect(() => {
+        loadProjects();
+    }, []);
+    const data = [
+        { name: "Ongoing Projects", value: ongoingProjects.length },
+        { name: "Finished Projects", value: projects.length },
+        { name: "Upcoming Projects", value: 2 },
+    ];
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <div className="flex flex-col items-center">
+                    <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                    <p className="mt-4 text-gray-700 text-lg font-medium">Loading...</p>
+                </div>
+            </div>
+        );
+    }
     return (
         <div>
             <h2 className="text-2xl font-semibold mb-4">Project Overview</h2>
@@ -98,12 +107,12 @@ const Dashboard = () => {
             <div className="bg-white p-6 rounded-xl shadow-md">
                 <h3 className="text-lg font-semibold mb-4">Finished Projects</h3>
                 <div className="space-y-4">
-                    {finishedProjects.map((p, i) => (
+                    {projects.map((p, i) => (
                         <div key={i} className="border-b pb-3">
-                            <h4 className="font-semibold text-gray-800">{p.title}</h4>
+                            <h4 className="font-semibold text-gray-800">{p.name}</h4>
                             <p className="text-gray-600 text-sm">{p.description}</p>
                             <a
-                                href={p.link}
+                                href={p.liveLink}
                                 target="_blank"
                                 rel="noreferrer"
                                 className="text-blue-500 text-sm hover:underline"

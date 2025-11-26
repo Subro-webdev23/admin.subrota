@@ -7,6 +7,7 @@ const AddProject = () => {
         name: "",
         image: "",
         stack: "",
+        status: "",
         description: "",
         liveLink: "",
         githubLink: "",
@@ -42,6 +43,7 @@ const AddProject = () => {
                     name: "",
                     image: "",
                     stack: "",
+                    status: "",
                     description: "",
                     liveLink: "",
                     githubLink: "",
@@ -100,6 +102,23 @@ const AddProject = () => {
                     />
                     <p className="text-xs text-gray-500 mt-1">Use commas to separate items</p>
                 </div>
+
+                {/* Project Status */}
+                <div>
+                    <label className="block text-gray-700 mb-1 font-medium">Project Status</label>
+                    <select
+                        name="status"
+                        value={formData.status}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500"
+                    >
+                        <option value="">Select Project Status</option>
+                        <option value="ongoing">Ongoing Project</option>
+                        <option value="finished">Finished Project</option>
+                        <option value="upcoming">Upcoming Project</option>
+                    </select>
+                </div>
+
 
                 {/* Description */}
                 <div>
